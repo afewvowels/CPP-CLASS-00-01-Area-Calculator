@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include "point.h"
 #include "project1.h"
 #include "fraction.h"
