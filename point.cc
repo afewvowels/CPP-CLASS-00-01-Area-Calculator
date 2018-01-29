@@ -1,70 +1,121 @@
 #include "point.h"
+#include "fraction.h"
 
 using namespace std;
 
-// Constructor uses x and y variables as inputs
-Point::Point(int x, int y) {
-	xcoordinate = x;
-	ycoordinate = y;
+Point::Point(Fraction a, Fraction b) {
+	fraction1 = a;
+	fraction2 = b;
+}
+
+Point::Point() {
+	fraction1 = (-999/-999);
+	fraction2 = (-999/-999);
 }
 
 // Destructor
 Point::~Point(void) { }
 
-// Defines operation to calculate distance between points
-// Follow format x1y2 - x2y1 and returns the distance
-int Point::operator*(Point p2) {
-    double
-        a,
-        b;
-    
-	a = xcoordinate * p2.ycoordinate;
-	b = ycoordinate * p2.xcoordinate;
+void Point::setFraction1(Fraction frac) {
+    fraction1 = frac;
+}
 
-	return a - b;
+void Point::setFraction2(Fraction frac) {
+    fraction2 = frac;
+}
+
+Fraction Point::getFraction1() {
+    return fraction1;
+}
+
+Fraction Point::getFraction2() {
+    return fraction2;
+}
+
+// Defines cross multiplication operation to calculate
+// distance between points
+// Follow format x1y2 - x2y1 and returns the distance
+// as a fraction
+Fraction Point::operator%(Point p) {
+   Fraction
+       a,
+       b;
+
+   a = fraction1 * p.fraction2;
+   b = fraction2 * p.fraction1;
+
+   return a - b;
+}
+
+// Multiplies the fractions in a point with the fractions
+// in another point and returns the resulting point
+Point Point::operator*(Fraction f) {
+		Fraction
+				a,
+				b;
+
+		a = fraction1 * f;
+		b = fraction2 * f;
+
+		return Point(a,b);
+}
+
+// Calculates the midpoint between two points
+// and returns the result as a point
+Point Point::operator+(Point p) {
+   Fraction
+       a,
+       b,
+			 half(1,2);
+
+   a = (fraction1 + p.fraction1) * half;
+   b = (fraction2 + p.fraction2) * half;
+
+   return Point(a,b);
+}
+
+// Calculates the midpoint between two points
+// and returns the result as a point
+Point Point::operator-(Point p) {
+   Fraction
+       a,
+       b,
+			 half(1,2);
+
+   a = (fraction1 - p.fraction1) * half;
+   b = (fraction2 - p.fraction2) * half;
+
+   return Point(a,b);
 }
 
 // Used to compare two different points !=
 bool Point::operator!=(Point point2) {
-    return xcoordinate != point2.xcoordinate || ycoordinate != point2.ycoordinate;
+    return fraction1 != point2.fraction1 || fraction2 != point2.fraction2;
 }
 
 // Used to compare two different points ==
 bool Point::operator==(Point point2) {
-    return xcoordinate == point2.xcoordinate && ycoordinate == point2.ycoordinate;
+    return fraction1 == point2.fraction1 && fraction2 == point2.fraction2;
 }
 
-// Modified to contain data validation on integer inputs
 istream &operator>>(istream &is,Point &p) {
-	int
-		x,
-		y;
+    Fraction
+        x,
+        y;
 
-    cin >> x;
-    while(!(cin)) {
-        cout << "Please enter an integer x-coordinate: ";
-        cin.clear();
-        cin.ignore(INT_MAX, '\n');
-        cin >> x;
-    }
-    
-    cin.ignore(16, ',');
-    
-    cin >> y;
-    while(!(cin)) {
-        cout << "Please enter an integer y-coordinate: ";
-        cin.clear();
-        cin.ignore(INT_MAX, '\n');
-        cin >> y;
-    }
-    
-	p = Point(x,y);
+    is.ignore(16,'(');
+    is >> x;
+    is.ignore(16,',');
+    is >> y;
+    is.ignore(16,')');
 
-	return is;
+		p = Point(x,y);
+
+    return is;
 }
 
 ostream &operator<<(ostream &os,Point &p) {
-    os << "( " << p.xcoordinate << " , " << p.ycoordinate << " )";
-	
-	return os;
+    os << "( " << p.fraction1 << " , " << p.fraction2 << " )";
+
+    return os;
 }

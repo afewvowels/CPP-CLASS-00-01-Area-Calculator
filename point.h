@@ -2,31 +2,42 @@
 #define _POINT_H
 
 #include<iostream>
+#include"fraction.h"
 
 using namespace std;
 
 class Point {
 	public:
-    
+
         // Constructor & destructor
-        Point(int p1=0, int p2=0);
+        Point(Fraction a, Fraction b);
+        Point();
         ~Point(void);
-    
-        // Operator to calculate distance between two points
-        int operator*(Point p2);
-    
+
+		    void setFraction1(Fraction);
+		    void setFraction2(Fraction);
+
+        Fraction getFraction1();
+        Fraction getFraction2();
+
+        //Operator to calculate distance between two points
+       	Fraction operator%(Point p);
+       	Point operator*(Fraction f);
+				Point operator+(Point p);
+				Point operator-(Point p);
+
         // Comparison operators to compare two points
         bool operator!=(Point point2);
         bool operator==(Point point2);
-    
+
 		// Prototypes for I/O functions
-		friend istream &operator>>(istream &,Point &);
-		friend ostream &operator<<(ostream &,Point &);
+        friend istream &operator>>(istream &,Point &);
+        friend ostream &operator<<(ostream &,Point &);
 	private:
 		// X & Y coordinate integers
-		int
-            xcoordinate,
-            ycoordinate;
+		Fraction
+        fraction1,
+        fraction2;
 };
 
 #endif
